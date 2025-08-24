@@ -15,9 +15,9 @@ namespace Todolist.Api.Services.Foundations.TaskItems
 
         public TaskItemService(IStorageBroker storageBroker) =>
             this.storageBroker = storageBroker;
-        
 
-        public ValueTask<TaskItem> AddTaskItemAsync(TaskItem taskitem) =>
-            throw new NotImplementedException();
+
+        public async ValueTask<TaskItem> AddTaskItemAsync(TaskItem taskitem) =>
+            await this.storageBroker.InsertTaskItemAsync(taskitem);
     }
 }

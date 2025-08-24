@@ -5,6 +5,7 @@
 //===================================================
 
 using FluentAssertions;
+using Force.DeepCloner;
 using Moq;
 using Todolist.Api.Models.Foundations.TaskItems;
 
@@ -19,7 +20,7 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
             TaskItem randomTaskItem = CreateRandomTaskItem();
             TaskItem inputTaskItem = randomTaskItem;
             TaskItem outputTaskItem = inputTaskItem;
-            TaskItem expectedTaskItem = outputTaskItem;
+            TaskItem expectedTaskItem = outputTaskItem.DeepClone();
 
             this.storagebrokerMock.Setup(broker =>
                broker.InsertTaskItemAsync(inputTaskItem))
