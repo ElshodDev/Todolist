@@ -1,5 +1,9 @@
+using Todolist.Api.Brokers.Storages;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
+builder.Services.AddDbContext<StorageBroker>();
+builder.Services.AddTransient<IStorageBroker,StorageBroker>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
