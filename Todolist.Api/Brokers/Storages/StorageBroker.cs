@@ -1,4 +1,10 @@
-﻿using EFxceptions;
+﻿//===================================================
+// Copyright (c) 2025 Elshod Ibadullayev
+// Free To Use For Learning and Development
+// Project: Todolist.Api
+//===================================================
+
+using EFxceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Todolist.Api.Brokers.Storages

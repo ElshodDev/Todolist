@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿//===================================================
+// Copyright (c) 2025 Elshod Ibadullayev
+// Free To Use For Learning and Development
+// Project: Todolist.Api
+//===================================================
+
+using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
 namespace Todolist.Api.Controllers
