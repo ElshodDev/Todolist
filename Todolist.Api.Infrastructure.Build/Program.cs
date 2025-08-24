@@ -1,4 +1,9 @@
-﻿
+﻿//===================================================
+// Copyright (c) 2025 Elshod Ibadullayev
+// Free To Use For Learning and Development
+// Project: Todolist.Api
+//===================================================
+
 using ADotNet.Clients;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets.Tasks;

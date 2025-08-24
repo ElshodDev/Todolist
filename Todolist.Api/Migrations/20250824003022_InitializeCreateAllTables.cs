@@ -1,4 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿//===================================================
+// Copyright (c) 2025 Elshod Ibadullayev
+// Free To Use For Learning and Development
+// Project: Todolist.Api
+//===================================================
+
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 

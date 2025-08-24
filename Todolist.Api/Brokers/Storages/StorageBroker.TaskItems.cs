@@ -1,4 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿//===================================================
+// Copyright (c) 2025 Elshod Ibadullayev
+// Free To Use For Learning and Development
+// Project: Todolist.Api
+//===================================================
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Todolist.Api.Models.Foundations.TaskItems;
 
@@ -10,10 +16,10 @@ namespace Todolist.Api.Brokers.Storages
 
         public async ValueTask<TaskItem> InsertTaskItemAsync(TaskItem taskItem)
         {
-          using var broker = new StorageBroker(this.configuration);
-            
-           EntityEntry<TaskItem> taskEntityEnrty = 
-                await broker.TaskItems.AddAsync(taskItem);
+            using var broker = new StorageBroker(this.configuration);
+
+            EntityEntry<TaskItem> taskEntityEnrty =
+                 await broker.TaskItems.AddAsync(taskItem);
 
             await broker.SaveChangesAsync();
 
