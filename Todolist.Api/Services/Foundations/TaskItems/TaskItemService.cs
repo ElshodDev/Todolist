@@ -7,11 +7,10 @@
 using Todolist.Api.Brokers.Loggings;
 using Todolist.Api.Brokers.Storages;
 using Todolist.Api.Models.Foundations.TaskItems;
-using Todolist.Api.Models.Foundations.TaskItems.Exceptions;
 
 namespace Todolist.Api.Services.Foundations.TaskItems
 {
-    public class TaskItemService : ITaskItemService
+    public partial class TaskItemService : ITaskItemService
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
@@ -24,26 +23,14 @@ namespace Todolist.Api.Services.Foundations.TaskItems
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<TaskItem> AddTaskItemAsync(TaskItem taskitem)
-        {
-            try
-            {
-                if (taskitem is null)
-                {
-                    throw new NullTaskItemException();
-                }
+        public ValueTask<TaskItem> AddTaskItemAsync(TaskItem taskitem) =>
+            TryCatch(async () =>
 
+            {
+                ValidateTaskItemNotNull(taskitem);
 
                 return await this.storageBroker.InsertTaskItemAsync(taskitem);
-            }
-            catch (NullTaskItemException nullTaskItemException)
-            {
-                var taskItemValidationException= new TaskItemValidationException(nullTaskItemException);
-                
-                this.loggingBroker.LogError(taskItemValidationException);
-                
-                throw taskItemValidationException;
-            }
-        }
+
+            });
     }
 }
