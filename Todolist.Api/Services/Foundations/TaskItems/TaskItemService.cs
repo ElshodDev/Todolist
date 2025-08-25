@@ -26,18 +26,24 @@ namespace Todolist.Api.Services.Foundations.TaskItems
 
         public async ValueTask<TaskItem> AddTaskItemAsync(TaskItem taskitem)
         {
-            if (taskitem == null)
+            try
             {
-                var nullTaskItemException = new NullTaskItemException();
-                var taskItemValidationException =
-                    new TaskItemValidationException(nullTaskItemException);
+                if (taskitem is null)
+                {
+                    throw new NullTaskItemException();
+                }
 
+
+                return await this.storageBroker.InsertTaskItemAsync(taskitem);
+            }
+            catch (NullTaskItemException nullTaskItemException)
+            {
+                var taskItemValidationException= new TaskItemValidationException(nullTaskItemException);
+                
                 this.loggingBroker.LogError(taskItemValidationException);
-
+                
                 throw taskItemValidationException;
             }
-
-            return await this.storageBroker.InsertTaskItemAsync(taskitem);
         }
     }
 }

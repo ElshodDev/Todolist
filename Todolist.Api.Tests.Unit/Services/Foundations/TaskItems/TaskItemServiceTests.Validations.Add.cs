@@ -40,7 +40,7 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
 
             this.storagebrokerMock.Verify(broker=>
             broker.InsertTaskItemAsync(It.IsAny<TaskItem>()),
-            Times.Once);
+            Times.Never);
 
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storagebrokerMock.VerifyNoOtherCalls();
