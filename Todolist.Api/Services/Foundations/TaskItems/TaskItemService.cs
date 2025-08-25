@@ -4,20 +4,40 @@
 // Project: Todolist.Api
 //===================================================
 
+using Todolist.Api.Brokers.Loggings;
 using Todolist.Api.Brokers.Storages;
 using Todolist.Api.Models.Foundations.TaskItems;
+using Todolist.Api.Models.Foundations.TaskItems.Exceptions;
 
 namespace Todolist.Api.Services.Foundations.TaskItems
 {
     public class TaskItemService : ITaskItemService
     {
         private readonly IStorageBroker storageBroker;
+        private readonly ILoggingBroker loggingBroker;
 
-        public TaskItemService(IStorageBroker storageBroker) =>
+        public TaskItemService(
+            IStorageBroker storageBroker,
+            ILoggingBroker loggingBroker)
+        {
             this.storageBroker = storageBroker;
+            this.loggingBroker = loggingBroker;
+        }
 
+        public async ValueTask<TaskItem> AddTaskItemAsync(TaskItem taskitem)
+        {
+            if (taskitem == null)
+            {
+                var nullTaskItemException = new NullTaskItemException();
+                var taskItemValidationException =
+                    new TaskItemValidationException(nullTaskItemException);
 
-        public async ValueTask<TaskItem> AddTaskItemAsync(TaskItem taskitem) =>
-            await this.storageBroker.InsertTaskItemAsync(taskitem);
+                this.loggingBroker.LogError(taskItemValidationException);
+
+                throw taskItemValidationException;
+            }
+
+            return await this.storageBroker.InsertTaskItemAsync(taskitem);
+        }
     }
 }

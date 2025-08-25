@@ -28,7 +28,7 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
 
             //when 
             TaskItem actualTaskItem =
-            await this.taskItemServic.AddTaskItemAsync(inputTaskItem);
+            await this.taskItemService.AddTaskItemAsync(inputTaskItem);
 
             //then
             actualTaskItem.Should().BeEquivalentTo(expectedTaskItem);
@@ -38,6 +38,7 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
                 Times.Once);
 
             this.storagebrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }
