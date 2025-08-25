@@ -38,6 +38,10 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
                     expectedTaskItemValidationException))),
                 Times.Once);
 
+            this.storagebrokerMock.Verify(broker=>
+            broker.InsertTaskItemAsync(It.IsAny<TaskItem>()),
+            Times.Once);
+
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storagebrokerMock.VerifyNoOtherCalls();
         }
