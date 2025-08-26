@@ -4,6 +4,7 @@
 // Project: Todolist.Api
 //===================================================
 
+using Microsoft.Data.SqlClient;
 using Todolist.Api.Models.Foundations.TaskItems;
 using Todolist.Api.Models.Foundations.TaskItems.Exceptions;
 using Xeptions;
@@ -28,7 +29,16 @@ namespace Todolist.Api.Services.Foundations.TaskItems
             {
                 throw CreateAndLogValidationException(invalidTaskItemException);
             }
+            catch (SqlException sqlException)
+            {
+                var failedTaskItemStorageException =
+               new FailedTaskItemStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedTaskItemStorageException);
+            }
         }
+
+
         private TaskItemValidationException CreateAndLogValidationException(Xeption exception)
         {
             var taskItemValidationException = new TaskItemValidationException(exception);
@@ -36,6 +46,16 @@ namespace Todolist.Api.Services.Foundations.TaskItems
             this.loggingBroker.LogError(taskItemValidationException);
 
             return taskItemValidationException;
+        }
+
+        private TaskItemDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
+        {
+            var expectedTaskItemDependecyException = new
+               TaskItemDependencyException(exception);
+
+            this.loggingBroker.LogCritical(expectedTaskItemDependecyException);
+
+            return expectedTaskItemDependecyException;
         }
     }
 }
