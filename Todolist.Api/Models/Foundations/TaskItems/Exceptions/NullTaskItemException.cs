@@ -4,11 +4,14 @@
 // Project: Todolist.Api
 //===================================================
 
-namespace Todolist.Api.Tests.Unit
+using Xeptions;
+
+namespace Todolist.Api.Models.Foundations.TaskItems.Exceptions
 {
-    public class DeleteMe
+    public class NullTaskItemException : Xeption
     {
-        [Fact]
-        public void ShouldBeTrue() =>Assert.True(true);
+        public NullTaskItemException()
+            :base(message: "TaskItem is null")
+        { }
     }
 }
