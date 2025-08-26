@@ -4,6 +4,7 @@
 // Project: Todolist.Api
 //===================================================
 
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Moq;
 using Todolist.Api.Models.Foundations.TaskItems;
@@ -48,6 +49,47 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
                 expectedTaskItemDependecyException))),
                 Times.Once);
 
+
+            this.storagebrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationOnAddIfDublicateKeyErrorOccursAndlogitAsync()
+        {
+            //given
+            TaskItem SomeTaskItem = CreateRandomTaskItem();
+            string SomeMessage = GetRandomString();
+
+            var duplicateKeyException = new DuplicateKeyException(SomeMessage);
+
+            var alreadyExistTaskItemException =
+               new AlreadyExistTaskItemException(duplicateKeyException);
+
+            var expectedTaskItemDependencyValidationException =
+                new TaskItemDependencyValidationException(alreadyExistTaskItemException);
+
+            this.storagebrokerMock.Setup(broker =>
+           broker.InsertTaskItemAsync(SomeTaskItem))
+               .ThrowsAsync(duplicateKeyException);
+
+            //when 
+            ValueTask<TaskItem> addTaskItemTask =
+               this.taskItemService.AddTaskItemAsync(SomeTaskItem);
+
+            //then
+            await Assert.ThrowsAsync<TaskItemDependencyValidationException>(() =>
+            addTaskItemTask.AsTask());
+
+            this.storagebrokerMock.Verify(broker =>
+            broker.InsertTaskItemAsync(SomeTaskItem),
+            Times.Once);
+
+
+            this.loggingBrokerMock.Verify(Broker =>
+            Broker.LogError(It.Is(SameExceptionAs(
+                expectedTaskItemDependencyValidationException))),
+                Times.Once);
 
             this.storagebrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();

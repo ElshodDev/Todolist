@@ -52,6 +52,9 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
             return new Random().Next(0, 2) == 1;
         }
 
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
+
         private static SqlException GetSqlError() =>
           (SqlException)FormatterServices.GetSafeUninitializedObject(typeof(SqlException));
     }
