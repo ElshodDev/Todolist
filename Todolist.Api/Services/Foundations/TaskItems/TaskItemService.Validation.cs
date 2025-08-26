@@ -16,9 +16,9 @@ namespace Todolist.Api.Services.Foundations.TaskItems
             ValidateTaskItemNotNull(taskItem);
 
             Validate(
-                (Rule: IsInvalid(taskItem.Id), Parameter: nameof(TaskItem.Id)),
-                (Rule: IsInvalid(taskItem.Title), Parameter: nameof(TaskItem.Title)),
-                (Rule: IsInvalid(taskItem.CreatedAt), Parameter: nameof(TaskItem.CreatedAt))
+              (Rule: IsInvalid(taskItem.Id), Parameter: nameof(TaskItem.Id)),
+              (Rule: IsInvalid(taskItem.Title), Parameter: nameof(TaskItem.Title)),
+              (Rule: IsInvalid(taskItem.CreatedAt), Parameter: nameof(TaskItem.CreatedAt))
             );
         }
 

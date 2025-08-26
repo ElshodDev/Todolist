@@ -11,7 +11,7 @@ namespace Todolist.Api.Models.Foundations.TaskItems.Exceptions
     public class TaskItemDependencyException : Xeption
     {
         public TaskItemDependencyException(Xeption innerException)
-            : base(message:"TaskItem dependency error occurred, contact support.", innerException)
+            : base(message: "TaskItem dependency error occurred, contact support.", innerException)
         { }
     }
 }
