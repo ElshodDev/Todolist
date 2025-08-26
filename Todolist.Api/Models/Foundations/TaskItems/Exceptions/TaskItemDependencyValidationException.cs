@@ -12,7 +12,8 @@ namespace Todolist.Api.Models.Foundations.TaskItems.Exceptions
     {
         public TaskItemDependencyValidationException(Xeption innerException)
          : base(message: "TaskItem dependency validation error occured, fix the errors and try again",
-              innerException) { }
+              innerException)
+        { }
 
     }
 }

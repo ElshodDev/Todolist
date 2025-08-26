@@ -11,7 +11,7 @@ namespace Todolist.Api.Models.Foundations.TaskItems.Exceptions
     public class NullTaskItemException : Xeption
     {
         public NullTaskItemException()
-            :base(message: "TaskItem is null")
+            : base(message: "TaskItem is null")
         { }
     }
 }
