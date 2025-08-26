@@ -94,5 +94,47 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
             this.storagebrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccursAndLogItAsync()
+        {
+            //given 
+            TaskItem someTaskItem = CreateRandomTaskItem();
+            string ErrorDetermine = string.Empty;
+
+            var serviceException = new Exception();
+
+            var failedGuestServiceException =
+               new FailedTaskItemServiceException(serviceException);
+
+            var expectedGuestServiceException =
+                new TaskItemServiceException(failedGuestServiceException);
+
+            this.storagebrokerMock.Setup(broker =>
+           broker.InsertTaskItemAsync(someTaskItem))
+               .ThrowsAsync(serviceException);
+
+            //when
+            ValueTask<TaskItem> addGuestTask =
+               this.taskItemService.AddTaskItemAsync(someTaskItem);
+
+            //then
+            await Assert.ThrowsAsync<TaskItemServiceException>(() =>
+           addGuestTask.AsTask());
+
+            this.storagebrokerMock.Verify(broker =>
+            broker.InsertTaskItemAsync(someTaskItem),
+            Times.Once);
+
+
+            this.loggingBrokerMock.Verify(Broker =>
+            Broker.LogError(It.Is(SameExceptionAs(
+                expectedGuestServiceException))),
+                Times.Once);
+
+
+            this.storagebrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
