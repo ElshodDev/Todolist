@@ -27,7 +27,7 @@ namespace Todolist.Api.Services.Foundations.TaskItems
             TryCatch(async () =>
 
             {
-                ValidateTaskItemNotNull(taskitem);
+                ValidateTaskItemOnAdd(taskitem);
 
                 return await this.storageBroker.InsertTaskItemAsync(taskitem);
 

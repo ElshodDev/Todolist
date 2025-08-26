@@ -24,6 +24,10 @@ namespace Todolist.Api.Services.Foundations.TaskItems
             {
                 throw CreateAndLogValidationException(nullTaskItemException);
             }
+            catch (InvalidTaskItemException invalidTaskItemException)
+            {
+                throw CreateAndLogValidationException(invalidTaskItemException);
+            }
         }
         private TaskItemValidationException CreateAndLogValidationException(Xeption exception)
         {

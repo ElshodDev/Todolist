@@ -55,7 +55,7 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
             //given 
             var invalidTaskItem = new TaskItem
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Empty,
                 Title = invalidText,
                 CreatedAt = default
             };
@@ -64,22 +64,22 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
 
             invalidTaskItemException.AddData(
                 nameof(TaskItem.Id),
-                values: "Id is Required");
+                values: "id is required");
 
             invalidTaskItemException.AddData(
               nameof(TaskItem.Title),
-              values: "Text is Required");
+              values: "text is required");
 
             invalidTaskItemException.AddData(
                 nameof(TaskItem.CreatedAt),
-                values: "Date is required");
+                values: "date is required");
 
             var expectedTaskItemValidationException =
             new TaskItemValidationException(invalidTaskItemException);
 
             //when
             ValueTask<TaskItem> addTaskItemTask =
-        this.taskItemService.AddTaskItemAsync(invalidTaskItem);
+            this.taskItemService.AddTaskItemAsync(invalidTaskItem);
 
             //then
             await Assert.ThrowsAsync<TaskItemValidationException>(() =>
