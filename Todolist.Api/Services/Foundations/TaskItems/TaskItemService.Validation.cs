@@ -22,6 +22,17 @@ namespace Todolist.Api.Services.Foundations.TaskItems
             );
         }
 
+        private static void ValidationTaskItemId(Guid taskItemId) =>
+            Validate((Rule: IsInvalid(taskItemId), Parameter: nameof(TaskItem.Id)));
+
+        private static void ValidateStorageTaskItem(TaskItem maybeTaskItem, Guid taskItemId)
+        {
+            if (maybeTaskItem is null)
+            {
+                throw new NotFoundTaskItemException(taskItemId);
+            }
+        }
+
         private void ValidateTaskItemNotNull(TaskItem taskItem)
         {
             if (taskItem is null)
