@@ -6,6 +6,7 @@
 
 using Todolist.Api.Brokers.Loggings;
 using Todolist.Api.Brokers.Storages;
+using Todolist.Api.Services.Foundations.TaskItems;
 
 public class Program
 {
@@ -16,6 +17,7 @@ public class Program
         builder.Services.AddDbContext<StorageBroker>();
 
         AddBrokers(builder);
+        AddFoundationServices(builder);
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -37,5 +39,9 @@ public class Program
     {
         builder.Services.AddTransient<IStorageBroker, StorageBroker>();
         builder.Services.AddTransient<ILoggingBroker, LoggingBroker>();
+    }
+    private static void AddFoundationServices(WebApplicationBuilder builder)
+    {
+        builder.Services.AddTransient<ITaskItemService, TaskItemService>();
     }
 }
