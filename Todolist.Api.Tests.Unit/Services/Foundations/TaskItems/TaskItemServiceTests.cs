@@ -4,7 +4,9 @@
 // Project: Todolist.Api
 //===================================================
 
+using Microsoft.Data.SqlClient;
 using Moq;
+using System.Runtime.Serialization;
 using Todolist.Api.Brokers.Loggings;
 using Todolist.Api.Brokers.Storages;
 using Todolist.Api.Models.Foundations.TaskItems;
@@ -49,5 +51,8 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
         {
             return new Random().Next(0, 2) == 1;
         }
+
+        private static SqlException GetSqlError() =>
+          (SqlException)FormatterServices.GetSafeUninitializedObject(typeof(SqlException));
     }
 }
