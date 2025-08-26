@@ -104,11 +104,11 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
 
             var serviceException = new Exception();
 
-            var failedGuestServiceException =
+            var failedTaskItemServiceException =
                new FailedTaskItemServiceException(serviceException);
 
             var expectedGuestServiceException =
-                new TaskItemServiceException(failedGuestServiceException);
+                new TaskItemServiceException(failedTaskItemServiceException);
 
             this.storagebrokerMock.Setup(broker =>
            broker.InsertTaskItemAsync(someTaskItem))

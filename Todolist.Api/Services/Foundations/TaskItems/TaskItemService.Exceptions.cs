@@ -44,7 +44,15 @@ namespace Todolist.Api.Services.Foundations.TaskItems
 
                 throw CreateAndLogDependencyValidationException(alreadyExistTaskItemException);
             }
+            catch (Exception exception)
+            {
+                var failedTaskItemServiceException =
+               new FailedTaskItemServiceException(exception);
+
+                throw CreateAndLogServiceException(failedTaskItemServiceException);
+            }
         }
+
 
         private TaskItemValidationException CreateAndLogValidationException(Xeption exception)
         {
@@ -75,5 +83,14 @@ namespace Todolist.Api.Services.Foundations.TaskItems
             return expectedTaskItemDependencyValidationException;
         }
 
+        private TaskItemServiceException CreateAndLogServiceException(Xeption serviceException)
+        {
+            var expectedGuestServiceException =
+               new TaskItemServiceException(serviceException);
+
+            this.loggingBroker.LogError(expectedGuestServiceException);
+
+            return expectedGuestServiceException;
+        }
     }
 }
