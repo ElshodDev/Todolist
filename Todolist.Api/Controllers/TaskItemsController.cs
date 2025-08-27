@@ -23,7 +23,7 @@ namespace Todolist.Api.Controllers
             this.taskItemService = taskItemService;
         }
 
-        [HttpPost]
+        [HttpPost("Add")]
         public async ValueTask<ActionResult> PostTaskItemAsync(TaskItem taskItem)
         {
             try
@@ -53,6 +53,24 @@ namespace Todolist.Api.Controllers
             {
                 return InternalServerError(taskItemServiceException.InnerException);
             }
+        }
+
+        [HttpGet("GetAllTaskItems")]
+        public ActionResult<IQueryable<TaskItem>> GetAllTaskItems()
+        {
+            IQueryable<TaskItem> taskItems =
+                this.taskItemService.RetrieveAllTaskItems();
+
+            return Ok(taskItems);
+        }
+
+        [HttpGet("{taskItemId:guid}")]
+        public async ValueTask<ActionResult<TaskItem>> GetTaskItemByIdAsync(Guid taskItemId)
+        {
+            TaskItem taskItem =
+                await this.taskItemService.RetrieveTaskItemByIdAsync(taskItemId);
+
+            return Ok(taskItem);
         }
     }
 }
