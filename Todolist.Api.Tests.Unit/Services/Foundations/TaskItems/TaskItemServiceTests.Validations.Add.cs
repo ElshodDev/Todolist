@@ -108,7 +108,7 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
 
             invalidTaskItemException.AddData(
              nameof(TaskItem.Id),
-              "Id is required");
+              "id is required");
 
             var expectedTaskItemValidationException =
               new TaskItemValidationException(invalidTaskItemException);
