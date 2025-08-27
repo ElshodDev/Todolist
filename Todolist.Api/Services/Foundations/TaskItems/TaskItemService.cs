@@ -25,12 +25,37 @@ namespace Todolist.Api.Services.Foundations.TaskItems
 
         public ValueTask<TaskItem> AddTaskItemAsync(TaskItem taskitem) =>
             TryCatch(async () =>
-
             {
                 ValidateTaskItemOnAdd(taskitem);
 
                 return await this.storageBroker.InsertTaskItemAsync(taskitem);
 
             });
+
+        public IQueryable<TaskItem> RetrieveAllTaskItems() =>
+          this.storageBroker.SelectAllTaskItems();
+
+        public ValueTask<TaskItem> RetrieveTaskItemByIdAsync(Guid taskItemId) =>
+           TryCatch(async () =>
+           {
+               ValidationTaskItemId(taskItemId);
+               var maybeTaskItem =
+               await this.storageBroker.SelectTaskItemByIdAsync(taskItemId);
+
+               ValidateStorageTaskItem(maybeTaskItem, taskItemId);
+
+               return maybeTaskItem;
+           });
+
+        public ValueTask<TaskItem> ModifyTaskItemAsync(TaskItem taskItem) =>
+         TryCatch(async () =>
+         {
+             ValidateTaskItem(taskItem);
+
+             TaskItem updatedTaskItem = await this.storageBroker.UpdateAsync(taskItem);
+
+             return updatedTaskItem;
+         });
+
     }
 }

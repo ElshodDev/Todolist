@@ -23,7 +23,7 @@ namespace Todolist.Api.Controllers
             this.taskItemService = taskItemService;
         }
 
-        [HttpPost]
+        [HttpPost("Add")]
         public async ValueTask<ActionResult> PostTaskItemAsync(TaskItem taskItem)
         {
             try
@@ -54,5 +54,57 @@ namespace Todolist.Api.Controllers
                 return InternalServerError(taskItemServiceException.InnerException);
             }
         }
+
+        [HttpGet("GetAllTaskItems")]
+        public ActionResult<IQueryable<TaskItem>> GetAllTaskItems()
+        {
+            IQueryable<TaskItem> taskItems =
+                this.taskItemService.RetrieveAllTaskItems();
+
+            return Ok(taskItems);
+        }
+
+        [HttpGet("{taskItemId:guid}")]
+        public async ValueTask<ActionResult<TaskItem>> GetTaskItemByIdAsync(Guid taskItemId)
+        {
+            TaskItem taskItem =
+                await this.taskItemService.RetrieveTaskItemByIdAsync(taskItemId);
+
+            return Ok(taskItem);
+        }
+
+        [HttpPut("{taskItemId:guid}")]
+        public async ValueTask<ActionResult<TaskItem>> PutTaskItemAsync(
+         Guid taskItemId,
+         TaskItem taskItem)
+        {
+            try
+            {
+                if (taskItemId != taskItem.Id)
+                    return BadRequest("TaskItem ID mismatch.");
+
+                TaskItem updatedTaskItem =
+                    await this.taskItemService.ModifyTaskItemAsync(taskItem);
+
+                return Ok(updatedTaskItem);
+            }
+            catch (TaskItemValidationException taskItemValidationException)
+            {
+                return BadRequest(taskItemValidationException.InnerException);
+            }
+            catch (TaskItemDependencyValidationException taskItemDependencyValidationException)
+            {
+                return BadRequest(taskItemDependencyValidationException.InnerException);
+            }
+            catch (TaskItemDependencyException taskItemDependencyException)
+            {
+                return InternalServerError(taskItemDependencyException.InnerException);
+            }
+            catch (TaskItemServiceException taskItemServiceException)
+            {
+                return InternalServerError(taskItemServiceException.InnerException);
+            }
+        }
+
     }
 }

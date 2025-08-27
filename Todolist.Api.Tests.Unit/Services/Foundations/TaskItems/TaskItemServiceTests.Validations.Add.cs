@@ -98,7 +98,72 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
             this.storagebrokerMock.VerifyNoOtherCalls();
         }
 
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnRetrieveByIdIfIdIsInvalidAsync()
+        {
+            //given 
+            Guid invalidId = Guid.Empty;
 
+            var invalidTaskItemException = new InvalidTaskItemException();
+
+            invalidTaskItemException.AddData(
+             nameof(TaskItem.Id),
+              "id is required");
+
+            var expectedTaskItemValidationException =
+              new TaskItemValidationException(invalidTaskItemException);
+
+            // when
+            ValueTask<TaskItem> retrieveTaskItemByIdTask =
+                this.taskItemService.RetrieveTaskItemByIdAsync(invalidId);
+
+            //then
+            await Assert.ThrowsAsync<TaskItemValidationException>(() =>
+        retrieveTaskItemByIdTask.AsTask());
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedTaskItemValidationException))),
+                Times.Once);
+
+            this.storagebrokerMock.Verify(broker =>
+                broker.SelectTaskItemByIdAsync(It.IsAny<Guid>()),
+                Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storagebrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnUpdateIfTaskItemIsNullAsync()
+        {
+            // given
+            TaskItem nullTaskItem = null;
+            var invalidTaskItemException = new InvalidTaskItemException();
+            var expectedTaskItemValidationException =
+                new TaskItemValidationException(invalidTaskItemException);
+
+            // when
+            ValueTask<TaskItem>  modifyTaskItemTask =
+                this.taskItemService.ModifyTaskItemAsync(nullTaskItem);
+
+            // then
+            await Assert.ThrowsAsync<TaskItemValidationException>(() =>
+                modifyTaskItemTask.AsTask());
+ users/ElshodDev/controllers-taskItem-get
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(expectedTaskItemValidationException))),
+                Times.Once);
+
+            this.storagebrokerMock.Verify(broker  =>
+                broker.UpdateAsync(It.IsAny<TaskItem>()),
+                Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storagebrokerMock.VerifyNoOtherCalls();
+        }
+
+main
         private Expression<Func<Xeption, bool>> SameExceptionAs(
             Xeption expectedTaskItemValidationException) =>
             actualtaskItem =>
