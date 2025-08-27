@@ -99,8 +99,6 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
         }
 
 
-
-
         private Expression<Func<Xeption, bool>> SameExceptionAs(
             Xeption expectedTaskItemValidationException) =>
             actualtaskItem =>
