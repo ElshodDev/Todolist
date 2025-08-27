@@ -168,9 +168,11 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
         {
             // given
             TaskItem nullTaskItem = null;
-            var invalidTaskItemException = new InvalidTaskItemException();
+
+            var nullTaskItemException = new NullTaskItemException();
+
             var expectedTaskItemValidationException =
-                new TaskItemValidationException(invalidTaskItemException);
+                new TaskItemValidationException(nullTaskItemException);
 
             // when
             ValueTask<TaskItem> DeleteTaskItemTask =
