@@ -41,5 +41,15 @@ namespace Todolist.Api.Brokers.Storages
             await broker.SaveChangesAsync();
             return taskItem;
         }
+
+        public async ValueTask<TaskItem> DeleteAsync(TaskItem taskItem)
+        {
+            if (taskItem is null)
+                throw new ArgumentNullException(nameof(taskItem), "TaskItem cannot be null.");
+            var broker = new StorageBroker(configuration);
+            broker.Entry(taskItem).State = EntityState.Deleted;
+            await broker.SaveChangesAsync();
+            return taskItem;
+        }
     }
 }

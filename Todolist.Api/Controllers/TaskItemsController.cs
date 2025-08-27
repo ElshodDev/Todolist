@@ -106,5 +106,18 @@ namespace Todolist.Api.Controllers
             }
         }
 
+        [HttpDelete("{taskItemId}")]
+        public async ValueTask<ActionResult<TaskItem>> DeleteTaskItemAsync(Guid taskItemId)
+        {
+            TaskItem maybeTaskItem =
+                await this.taskItemService.RetrieveTaskItemByIdAsync(taskItemId);
+
+            TaskItem deletedTaskItem =
+                await this.taskItemService.DeleteTaskItemAsync(maybeTaskItem);
+
+            return Ok(deletedTaskItem);
+        }
+
+
     }
 }

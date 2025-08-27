@@ -47,7 +47,14 @@ namespace Todolist.Api.Services.Foundations.TaskItems
                 taskItem.CreatedAt = DateTime.UtcNow;
         }
 
+        private static void ValidateTaskItemDelete(TaskItem taskItem)
+        {
+            if (taskItem is null)
+                throw new NullTaskItemException();
 
+            if (taskItem.Id == default)
+                throw new InvalidTaskItemException();
+        }
 
         private void ValidateTaskItemNotNull(TaskItem taskItem)
         {
