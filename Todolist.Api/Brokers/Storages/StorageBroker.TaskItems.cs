@@ -25,5 +25,10 @@ namespace Todolist.Api.Brokers.Storages
 
             return taskEntityEnrty.Entity;
         }
+        public IQueryable<TaskItem> SelectAllTaskItems() =>
+     this.TaskItems;
+
+        public async ValueTask<TaskItem> SelectTaskItemByIdAsync(Guid taskItemId) =>
+            await this.TaskItems.FindAsync(taskItemId);
     }
 }

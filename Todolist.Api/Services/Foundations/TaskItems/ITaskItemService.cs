@@ -18,5 +18,6 @@ namespace Todolist.Api.Services.Foundations.TaskItems
     public interface ITaskItemService
     {
         ValueTask<TaskItem> AddTaskItemAsync(TaskItem taskitem);
+        ValueTask<TaskItem> RetrieveTaskItemByIdAsync(Guid taskItemId);
     }
 }

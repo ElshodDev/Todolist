@@ -98,6 +98,42 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
             this.storagebrokerMock.VerifyNoOtherCalls();
         }
 
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnRetrieveByIdIfIdIsInvalidAsync()
+        {
+            //given 
+            Guid invalidId = Guid.Empty;
+
+            var invalidTaskItemException = new InvalidTaskItemException();
+
+            invalidTaskItemException.AddData(
+             nameof(TaskItem.Id),
+              "Id is required");
+
+            var expectedTaskItemValidationException =
+              new TaskItemValidationException(invalidTaskItemException);
+
+            // when
+            ValueTask<TaskItem> retrieveTaskItemByIdTask =
+                this.taskItemService.RetrieveTaskItemByIdAsync(invalidId);
+
+            //then
+            await Assert.ThrowsAsync<TaskItemValidationException>(() =>
+        retrieveTaskItemByIdTask.AsTask());
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedTaskItemValidationException))),
+                Times.Once);
+
+            this.storagebrokerMock.Verify(broker =>
+                broker.SelectTaskItemByIdAsync(It.IsAny<Guid>()),
+                Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storagebrokerMock.VerifyNoOtherCalls();
+        }
+
 
 
 

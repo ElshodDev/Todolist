@@ -11,5 +11,7 @@ namespace Todolist.Api.Brokers.Storages
     public partial interface IStorageBroker
     {
         ValueTask<TaskItem> InsertTaskItemAsync(TaskItem taskItem);
+        IQueryable<TaskItem> SelectAllTaskItems();
+        ValueTask<TaskItem> SelectTaskItemByIdAsync(Guid taskItemId);
     }
 }
