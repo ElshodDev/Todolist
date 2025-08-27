@@ -13,5 +13,6 @@ namespace Todolist.Api.Brokers.Storages
         ValueTask<TaskItem> InsertTaskItemAsync(TaskItem taskItem);
         IQueryable<TaskItem> SelectAllTaskItems();
         ValueTask<TaskItem> SelectTaskItemByIdAsync(Guid taskItemId);
+        ValueTask<TaskItem> UpdateAsync(TaskItem taskItem);
     }
 }

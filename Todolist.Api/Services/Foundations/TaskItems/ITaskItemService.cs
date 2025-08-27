@@ -13,5 +13,6 @@ namespace Todolist.Api.Services.Foundations.TaskItems
         ValueTask<TaskItem> AddTaskItemAsync(TaskItem taskitem);
         ValueTask<TaskItem> RetrieveTaskItemByIdAsync(Guid taskItemId);
         IQueryable<TaskItem> RetrieveAllTaskItems();
+        ValueTask<TaskItem> ModifyTaskItemAsync(TaskItem taskItem);
     }
 }

@@ -26,9 +26,20 @@ namespace Todolist.Api.Brokers.Storages
             return taskEntityEnrty.Entity;
         }
         public IQueryable<TaskItem> SelectAllTaskItems() =>
-     this.TaskItems;
+        this.TaskItems;
 
         public async ValueTask<TaskItem> SelectTaskItemByIdAsync(Guid taskItemId) =>
             await this.TaskItems.FindAsync(taskItemId);
+
+        public async ValueTask<TaskItem> UpdateAsync(TaskItem taskItem)
+        {
+            if (taskItem is null)
+                throw new ArgumentNullException(nameof(taskItem), "TaskItem cannot be null.");
+
+            var broker = new StorageBroker(configuration);
+            broker.Entry(taskItem).State = EntityState.Modified;
+            await broker.SaveChangesAsync();
+            return taskItem;
+        }
     }
 }

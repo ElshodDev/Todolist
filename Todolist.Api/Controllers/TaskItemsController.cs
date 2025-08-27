@@ -72,5 +72,39 @@ namespace Todolist.Api.Controllers
 
             return Ok(taskItem);
         }
+
+        [HttpPut("{taskItemId:guid}")]
+        public async ValueTask<ActionResult<TaskItem>> PutTaskItemAsync(
+         Guid taskItemId,
+         TaskItem taskItem)
+        {
+            try
+            {
+                if (taskItemId != taskItem.Id)
+                    return BadRequest("TaskItem ID mismatch.");
+
+                TaskItem updatedTaskItem =
+                    await this.taskItemService.ModifyTaskItemAsync(taskItem);
+
+                return Ok(updatedTaskItem);
+            }
+            catch (TaskItemValidationException taskItemValidationException)
+            {
+                return BadRequest(taskItemValidationException.InnerException);
+            }
+            catch (TaskItemDependencyValidationException taskItemDependencyValidationException)
+            {
+                return BadRequest(taskItemDependencyValidationException.InnerException);
+            }
+            catch (TaskItemDependencyException taskItemDependencyException)
+            {
+                return InternalServerError(taskItemDependencyException.InnerException);
+            }
+            catch (TaskItemServiceException taskItemServiceException)
+            {
+                return InternalServerError(taskItemServiceException.InnerException);
+            }
+        }
+
     }
 }
