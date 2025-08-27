@@ -134,7 +134,34 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
             this.storagebrokerMock.VerifyNoOtherCalls();
         }
 
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnUpdateIfTaskItemIsNullAsync()
+        {
+            // given
+            TaskItem nullTaskItem = null;
+            var invalidTaskItemException = new InvalidTaskItemException();
+            var expectedTaskItemValidationException =
+                new TaskItemValidationException(invalidTaskItemException);
 
+            // when
+            ValueTask<TaskItem>  modifyTaskItemTask =
+                this.taskItemService.ModifyTaskItemAsync(nullTaskItem);
+
+            // then
+            await Assert.ThrowsAsync<TaskItemValidationException>(() =>
+                modifyTaskItemTask.AsTask());
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(expectedTaskItemValidationException))),
+                Times.Once);
+
+            this.storagebrokerMock.Verify(broker  =>
+                broker.UpdateAsync(It.IsAny<TaskItem>()),
+                Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storagebrokerMock.VerifyNoOtherCalls();
+        }
 
 
         private Expression<Func<Xeption, bool>> SameExceptionAs(
