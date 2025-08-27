@@ -56,6 +56,15 @@ namespace Todolist.Api.Services.Foundations.TaskItems
 
              return updatedTaskItem;
          });
+        public ValueTask<TaskItem> DeleteTaskItemAsync(TaskItem taskItem) =>
+            TryCatch(async () =>
+            {
+                ValidateTaskItemDelete(taskItem);
+
+                TaskItem deleteTaskItem = await this.storageBroker.DeleteAsync(taskItem);
+
+                return deleteTaskItem;
+            });
 
     }
 }

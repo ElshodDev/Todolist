@@ -163,6 +163,35 @@ namespace Todolist.Api.Tests.Unit.Services.Foundations.TaskItems
             this.storagebrokerMock.VerifyNoOtherCalls();
         }
 
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnDeleteIfTaskItemIsNullAsync()
+        {
+            // given
+            TaskItem nullTaskItem = null;
+            var invalidTaskItemException = new InvalidTaskItemException();
+            var expectedTaskItemValidationException =
+                new TaskItemValidationException(invalidTaskItemException);
+
+            // when
+            ValueTask<TaskItem> DeleteTaskItemTask =
+                this.taskItemService.DeleteTaskItemAsync(nullTaskItem);
+
+            // then
+            await Assert.ThrowsAsync<TaskItemValidationException>(() =>
+                DeleteTaskItemTask.AsTask());
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(expectedTaskItemValidationException))),
+                Times.Once);
+
+            this.storagebrokerMock.Verify(broker =>
+                broker.DeleteAsync(It.IsAny<TaskItem>()),
+                Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storagebrokerMock.VerifyNoOtherCalls();
+
+        }
 
         private Expression<Func<Xeption, bool>> SameExceptionAs(
             Xeption expectedTaskItemValidationException) =>
