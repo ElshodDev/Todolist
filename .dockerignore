@@ -1,0 +1,15 @@
+bin/
+obj/
+
+.vscode/
+.idea/
+*.user
+*.suo
+
+.git
+.gitignore
+
+*.DS_Store
+Thumbs.db
+
+*.log
