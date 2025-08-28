@@ -1,0 +1,5 @@
+services:
+  api:
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=TaskItemDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;
+      - ASPNETCORE_ENVIRONMENT=Development
